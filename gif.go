@@ -6,6 +6,7 @@ import (
     "strings"
 
     "github.com/peterhellberg/giphy"
+    "github.com/nlopes/slack"
 )
 
 func get_gif(tokens []string, ev *slack.MessageEvent, rtm *slack.RTM){
