@@ -70,37 +70,28 @@ func check_messages(text string, ev *slack.MessageEvent, rtm *slack.RTM) {
     switch cmd {
 
     case "gif":
-        get_gif(tokens)
+        get_gif(tokens, ev, rtm)
     case "addfriend":
-
+        add_friend()
     case "addphrase":
-
+        add_phrase()
     case "addjoke":
-
+        add_joke()
     case "rmfriend":
-
+        remove_friend()
     case "rmphrase":
-
+        remove_phrase()
     case "rmjoke":
-
+        remove_joke()
+    default:
+        usage(ev, rtm)
 
     }
 
 }
 
-    // check if the message string exactly matches "meow"
-    info := rtm.GetInfo()
-    matched, _ := regexp.MatchString("^meow$", text)
-    gif_needed, _ := regexp.MatchString("^gif .*",text)
+func usage(ev *slack.MessageEvent, rtm *slack.RTM) {
 
-    if ev.User != info.User.ID && matched {
-        rtm.SendMessage(rtm.NewOutgoingMessage("Is that Maru I hear?", ev.Channel))
-    }
-
-        if len(res.Data) > 0 {
-            rtm.SendMessage(rtm.NewOutgoingMessage(res.Data[0].BitlyGifURL, ev.Channel))
-        }
-    }
-
+    rtm.SendMessage(rtm.NewOutgoingMessage("Sorry, I don't know what you're trying to do", ev.Channel))
 
 }
