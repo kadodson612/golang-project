@@ -18,17 +18,8 @@ func main() {
 }
 
 func check_message(text string) string {
-    var config Config
-    source, err := ioutil.ReadFile("phrases.yaml")
-    if err != nil {
-        panic(err)
-    }
-    err = yaml.Unmarshal(source, &config)
-    if err != nil {
-        panic(err)
-    }
-    //fmt.Printf("Value: %#v\n", config.Phrases["maru"])
-    //fmt.Printf("%+v\n", config)
+
+    config := read_yaml("phrases.yaml")
 
     for k, v := range config.Phrases {
         //fmt.Printf("key[%s] value[%s]\n", k, v)
