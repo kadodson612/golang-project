@@ -40,7 +40,11 @@ Loop:
                 text = strings.TrimSpace(text)
                 text = strings.ToLower(text)
 
-                check_messages(text, ev, rtm)
+                // check if message is for bot
+                command, _ := regexp.MatchString("^?.*", text)
+                if command {
+                    check_messages(text, ev, rtm)
+                }
 
             case *slack.RTMError:
                 fmt.Printf("Error: %s\n", ev.Error())
@@ -60,28 +64,34 @@ Loop:
 
 func check_messages(text string, ev *slack.MessageEvent, rtm *slack.RTM) {
 
-    // check if the message string exactly matches "meow"
-    info := rtm.GetInfo()
-    matched, _ := regexp.MatchString("^meow$", text)
-    gif_needed, _ := regexp.MatchString("^gif .*",text)
+    tokens := strings.Fields(text)
+    cmd := strings.Replace(tokens.get(0), "?", "", -1)
 
-    if ev.User != info.User.ID && matched {
-        rtm.SendMessage(rtm.NewOutgoingMessage("Is that Maru I hear?", ev.Channel))
+    switch cmd {
+
+    case "gif":
+        get_gif(tokens, ev, rtm)
+    case "addfriend":
+        add_friend()
+    case "addphrase":
+        add_phrase()
+    case "addjoke":
+        add_joke()
+    case "rmfriend":
+        remove_friend()
+    case "rmphrase":
+        remove_phrase()
+    case "rmjoke":
+        remove_joke()
+    default:
+        usage(ev, rtm)
+
     }
 
-    if gif_needed {
-        text = text[3:]
-        g := giphy.DefaultClient
-        res, err := g.Search([]string{text})
-        if err != nil {
-            fmt.Println(err)
-            os.Exit(1)
-        }
+}
 
-        if len(res.Data) > 0 {
-            rtm.SendMessage(rtm.NewOutgoingMessage(res.Data[0].BitlyGifURL, ev.Channel))
-        }
-    }
+func usage(ev *slack.MessageEvent, rtm *slack.RTM) {
 
+    rtm.SendMessage(rtm.NewOutgoingMessage("Sorry, I don't know what you're trying to do", ev.Channel))
 
 }
