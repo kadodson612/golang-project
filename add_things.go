@@ -5,8 +5,6 @@ import (
     "strings"
 
     "github.com/nlopes/slack"
-    //"gopkg.in/yaml.v2"
-
 )
 
 func add_friend(tokens []string, ev *slack.MessageEvent, rtm *slack.RTM) {
@@ -17,40 +15,54 @@ func add_friend(tokens []string, ev *slack.MessageEvent, rtm *slack.RTM) {
     }
 
     name := strings.ToLower(tokens[1])
+    yaml := read_yaml("yaml/friends.yaml")
 
     // check if friend exists
+    _, exists := yaml.Friends[name]
 
-    // add friend to yaml struct and write
+    if exists != true {
 
-    fmt.Println("friend:", name)
+        // add friend to yaml struct and write
+        yaml.Friends[name] = Friend{}
+        write_yaml("yaml/friends.yaml", yaml)
+
+    }
 
 }
 
 func add_phrase(tokens []string, ev *slack.MessageEvent, rtm *slack.RTM) {
 
     // check for arguments
-    if len(tokens) != 3 {
+    if len(tokens) < 3 {
         send_message("Usage: ?addphrase <name> <phrase>", ev, rtm)
     }
 
     name := strings.ToLower(tokens[1])
     phrase := strings.ToLower(strings.Join(tokens[2:], " "))
+    yaml := read_yaml("yaml/friends.yaml")
 
-    // make sure friend exists
+    _, exists := yaml.Friends[name]
 
-    // check that phrase is not a duplicate 
+    if exists == true {
 
-    // add phrase to yaml struct and write
+        // add phrase to yaml struct and write
+        friend := yaml.Friends[name]
+        friend.Phrases = append(friend.Phrases, phrase)
 
-    fmt.Println("name:", name)
-    fmt.Println("phrase:", phrase)
+        fmt.Println(friend.Phrases)
+
+        yaml.Friends[name] = friend
+        write_yaml("yaml/friends.yaml", yaml)
+    }
+
+    fmt.Println("PHRASE ADDED")
 
 }
 
 func add_joke(tokens []string, ev *slack.MessageEvent, rtm *slack.RTM) {
 
     // check for arguments
-    if len(tokens) != 2 {
+    if len(tokens) < 2 {
         send_message("Usage: ?addjoke <joke>", ev, rtm)
     }
 
@@ -59,5 +71,43 @@ func add_joke(tokens []string, ev *slack.MessageEvent, rtm *slack.RTM) {
     // add joke to yaml struct and write
 
     fmt.Println("joke:", joke)
+
+}
+
+func add_insult(tokens []string, ev *slack.MessageEvent, rtm *slack.RTM) {
+
+    // check for arguments
+    if len(tokens) < 2 {
+        send_message("Usage: ?addinsult <insult>", ev, rtm)
+    }
+
+}
+
+func add_alias(tokens []string, ev *slack.MessageEvent, rtm *slack.RTM) {
+
+    // check for arguments
+    if len(tokens) < 3 {
+        send_message("Usage: ?addalias <name> <alias>", ev, rtm)
+    }
+
+    name := strings.ToLower(tokens[1])
+    alias := strings.ToLower(strings.Join(tokens[2:], " "))
+    yaml := read_yaml("yaml/friends.yaml")
+
+    _, exists := yaml.Friends[name]
+
+    if exists == true {
+
+        // add phrase to yaml struct and write
+        friend := yaml.Friends[name]
+        friend.Aliases = append(friend.Aliases, alias)
+
+        fmt.Println(friend.Aliases)
+
+        yaml.Friends[name] = friend
+        write_yaml("yaml/friends.yaml", yaml)
+    }
+
+    fmt.Println("ALIAS ADDED")
 
 }

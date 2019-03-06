@@ -2,7 +2,6 @@ package main
 
 import (
     "fmt"
-    "regexp"
     "strings"
     "io/ioutil"
 
@@ -40,7 +39,8 @@ Loop:
                 text = strings.ToLower(text)
 
                 // check if message is for bot
-                command, _ := regexp.MatchString("^?.*", text)
+                command := strings.HasPrefix(text, "*")
+                debug(text)
                 if command {
                     check_messages(text, ev, rtm)
                 }
@@ -64,7 +64,7 @@ Loop:
 func check_messages(text string, ev *slack.MessageEvent, rtm *slack.RTM) {
 
     tokens := strings.Fields(text)
-    cmd := strings.Replace(tokens[0], "?", "", -1)
+    cmd := strings.Replace(tokens[0], "*", "", -1)
 
     // TODO: make a dictionary associating a cmd with a function and its parameters
 
@@ -85,8 +85,7 @@ func check_messages(text string, ev *slack.MessageEvent, rtm *slack.RTM) {
         debug(cmd)
         //deprecate()
     case "show":            // prints out all the items of a given category (joke, friend, etc.)
-        debug(cmd)
-        //show_items()
+        show_items(tokens, ev, rtm)
 
     case "addfriend":       // add a friend
         add_friend(tokens, ev, rtm)
@@ -95,14 +94,9 @@ func check_messages(text string, ev *slack.MessageEvent, rtm *slack.RTM) {
     case "addjoke":         // add an inside joke
         add_joke(tokens, ev, rtm)
     case "addinsult":       // add an insult
-        debug(cmd)
-        //add_insult(tokens, ev, rtm)
-    case "adddeprecate":    // add a deprecation
-        debug(cmd)
-        //add_deprecate(tokens, ev, rtm)
+        add_insult(tokens, ev, rtm)
     case "addalias":        // add an alias
-        debug(cmd)
-        //add_alias(tokens, ev, rtm)
+        add_alias(tokens, ev, rtm)
 
     case "rmfriend":        // remove a friend
         debug(cmd)
@@ -130,12 +124,4 @@ func check_messages(text string, ev *slack.MessageEvent, rtm *slack.RTM) {
 
 }
 
-func send_message(msg string, ev *slack.MessageEvent, rtm *slack.RTM) {
 
-    rtm.SendMessage(rtm.NewOutgoingMessage(msg, ev.Channel))
-
-}
-
-func debug(msg string) {
-    fmt.Println("DEBUG:", msg)
-}

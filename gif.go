@@ -2,7 +2,6 @@ package main
 
 import (
     "fmt"
-    "os"
     "strings"
 
     "github.com/peterhellberg/giphy"
@@ -18,7 +17,6 @@ func get_gif(tokens []string, ev *slack.MessageEvent, rtm *slack.RTM){
 
     if err != nil {
         fmt.Println(err)
-        os.Exit(1)
     }
 
     if len(res.Data) > 0 {
