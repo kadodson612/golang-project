@@ -8,9 +8,12 @@ import (
     "github.com/nlopes/slack"
 )
 
+var YAML_FILE string
 
 //MAIN FUNCTION -- instantiate bot
 func main() {
+
+    YAML_FILE = "squad.yaml"
 
     // fetch token file
     data, err := ioutil.ReadFile("token")
@@ -95,20 +98,15 @@ func check_messages(text string, ev *slack.MessageEvent, rtm *slack.RTM) {
         add_alias(tokens, ev, rtm)
 
     case "rmfriend":        // remove a friend
-        debug(cmd)
-        //remove_friend()
+        remove_friend(tokens, ev, rtm)
     case "rmphrase":        // remove a catchphrase
-        debug(cmd)
-        //remove_phrase()
+        remove_phrase(tokens, ev, rtm)
     case "rmjoke":          // remove an inside joke
-        debug(cmd)
-        //remove_joke()
+        remove_joke(tokens, ev, rtm)
     case "rminsult":        // remove an insult
-        debug(cmd)
-        //remove_insult()
+        remove_insult(tokens, ev, rtm)
     case "rmalias":         // remove an alias
-        debug(cmd)
-        //remove_alias()
+        remove_alias(tokens, ev, rtm)
 
     default:
         send_message("Not a command dood", ev, rtm)

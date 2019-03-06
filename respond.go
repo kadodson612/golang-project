@@ -15,7 +15,7 @@ func show(tokens []string, ev *slack.MessageEvent, rtm *slack.RTM) {
 
     item := tokens[1]
 
-    yaml := read_yaml("squad.yaml")
+    yaml := read_yaml(YAML_FILE)
 
     switch item {
 
