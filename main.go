@@ -8,11 +8,14 @@ import (
     "github.com/nlopes/slack"
 )
 
+var YAML_FILE string
 
 type function func([]string,*slack.MessageEvent,*slack.RTM)
 
 //MAIN FUNCTION -- instantiate bot
 func main() {
+
+    YAML_FILE = "squad.yaml"
 
     // fetch token file
     data, err := ioutil.ReadFile("token")
