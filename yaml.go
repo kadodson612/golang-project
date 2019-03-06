@@ -1,17 +1,18 @@
 package main
 
 import (
-    "fmt"
     "io/ioutil"
-    "regexp"
-    "math/rand"
-    "time"
 
     "gopkg.in/yaml.v2"
 )
 
 type Config struct {
-    Phrases map[string][]string
+    Friends map[string]Friend
+}
+
+type Friend struct {
+    Phrases []string
+    Aliases []string
 }
 
 func read_yaml(file string) Config {
@@ -34,6 +35,14 @@ func read_yaml(file string) Config {
 
 func write_yaml(file string, config Config) {
 
-    return(1)
+    to_write, err := yaml.Marshal(&config)
+    if err != nil {
+        panic(err)
+    }
+
+    err = ioutil.WriteFile(file, to_write, 0644)
+    if err != nil {
+        panic(err)
+    }
 
 }
