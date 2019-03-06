@@ -10,7 +10,7 @@ import (
     "github.com/nlopes/slack"
 )
 
-func show_items(tokens []string, ev *slack.MessageEvent, rtm *slack.RTM) {
+func show(tokens []string, ev *slack.MessageEvent, rtm *slack.RTM) {
 
     // check arguments
     if len(tokens) != 2 {
@@ -34,6 +34,23 @@ func show_items(tokens []string, ev *slack.MessageEvent, rtm *slack.RTM) {
         }
         send_message(strings.Join(friends, ", "), ev, rtm)
     }
+
+}
+
+
+func joke(tokens []string, ev *slack.MessageEvent, rtm *slack.RTM) {
+
+}
+
+func insult(tokens []string, ev *slack.MessageEvent, rtm *slack.RTM) {
+
+}
+
+func speak(tokens []string, ev *slack.MessageEvent, rtm *slack.RTM) {
+
+}
+
+func aka(tokens []string, ev *slack.MessageEvent, rtm *slack.RTM) {
 
 }
 

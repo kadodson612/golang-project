@@ -73,19 +73,15 @@ func check_messages(text string, ev *slack.MessageEvent, rtm *slack.RTM) {
     case "gif":             // sends a gif
         get_gif(tokens, ev, rtm)
     case "speak":           // sends a catchphrase
-        debug(cmd)
-        //speak()
+        speak(tokens, ev, rtm)
     case "joke":            // sends an inside joke
-        debug(cmd)
-        //joke()
+        joke(tokens, ev, rtm)
     case "insult":          // sends an insult
-        debug(cmd)
-        //insult()
-    case "deprecate":       // sends a deprecation
-        debug(cmd)
-        //deprecate()
+        insult(tokens, ev, rtm)
     case "show":            // prints out all the items of a given category (joke, friend, etc.)
-        show_items(tokens, ev, rtm)
+        show(tokens, ev, rtm)
+    case "aka":             // prints out all a friend's aliases
+        aka(tokens, ev, rtm)
 
     case "addfriend":       // add a friend
         add_friend(tokens, ev, rtm)
@@ -110,9 +106,6 @@ func check_messages(text string, ev *slack.MessageEvent, rtm *slack.RTM) {
     case "rminsult":        // remove an insult
         debug(cmd)
         //remove_insult()
-    case "rmdeprecate":     // remove a deprecation
-        debug(cmd)
-        //remove_deprecate()
     case "rmalias":         // remove an alias
         debug(cmd)
         //remove_alias()
