@@ -9,6 +9,8 @@ import (
 )
 
 
+type function func([]string,*slack.MessageEvent,*slack.RTM)
+
 //MAIN FUNCTION -- instantiate bot
 func main() {
 
@@ -61,60 +63,40 @@ Loop:
 
 }
 
+func call(f function, tokens []string, ev *slack.MessageEvent, rtm *slack.RTM) {
+    f(tokens, ev, rtm)
+}
+
 func check_messages(text string, ev *slack.MessageEvent, rtm *slack.RTM) {
 
     tokens := strings.Fields(text)
     cmd := strings.Replace(tokens[0], "*", "", -1)
 
-    // TODO: make a dictionary associating a cmd with a function and its parameters
+    // dictionary associating a command with a function
+    commands := map[string]function {
+        "gif": get_gif,
+        "speak": speak,
+        "joke": joke,
+        "insult": insult,
+        "show": show,
+        "aka": aka,
+        "addfriend": add_friend,
+        "addphrase": add_phrase,
+        "addjoke": add_joke,
+        "addinsult": add_insult,
+        "addalias": add_alias,
+        "rmfriend": remove_friend,
+        "rmphrase": remove_phrase,
+        "rmjoke": remove_joke,
+        "rminsult": remove_insult,
+        "rmalias": remove_alias}
 
-    switch cmd {
+    _, ok := commands[cmd]
 
-    case "gif":             // sends a gif
-        get_gif(tokens, ev, rtm)
-    case "speak":           // sends a catchphrase
-        speak(tokens, ev, rtm)
-    case "joke":            // sends an inside joke
-        joke(tokens, ev, rtm)
-    case "insult":          // sends an insult
-        insult(tokens, ev, rtm)
-    case "show":            // prints out all the items of a given category (joke, friend, etc.)
-        show(tokens, ev, rtm)
-    case "aka":             // prints out all a friend's aliases
-        aka(tokens, ev, rtm)
-
-    case "addfriend":       // add a friend
-        add_friend(tokens, ev, rtm)
-    case "addphrase":       // add a catchphrase
-        add_phrase(tokens, ev, rtm)
-    case "addjoke":         // add an inside joke
-        add_joke(tokens, ev, rtm)
-    case "addinsult":       // add an insult
-        add_insult(tokens, ev, rtm)
-    case "addalias":        // add an alias
-        add_alias(tokens, ev, rtm)
-
-    case "rmfriend":        // remove a friend
-        debug(cmd)
-        //remove_friend()
-    case "rmphrase":        // remove a catchphrase
-        debug(cmd)
-        //remove_phrase()
-    case "rmjoke":          // remove an inside joke
-        debug(cmd)
-        //remove_joke()
-    case "rminsult":        // remove an insult
-        debug(cmd)
-        //remove_insult()
-    case "rmalias":         // remove an alias
-        debug(cmd)
-        //remove_alias()
-
-    default:
-        send_message("Not a command dood", ev, rtm)
-
+    if ok {
+        call(commands[cmd], tokens, ev, rtm)
+    } else {
+        send_message("Not a command, dood", ev, rtm)
     }
 
 }
-
-
