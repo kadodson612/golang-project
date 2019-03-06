@@ -1,10 +1,6 @@
 package main
 
 import (
-//    "fmt"
-//    "regexp"
-//    "math/rand"
-//    "time"
     "strings"
 
     "github.com/nlopes/slack"
@@ -19,20 +15,20 @@ func show(tokens []string, ev *slack.MessageEvent, rtm *slack.RTM) {
 
     item := tokens[1]
 
+    yaml := read_yaml("squad.yaml")
+
     switch item {
 
     case "jokes":
-        //yaml := read_yaml("yaml/jokes.yaml")
+        send_message(strings.Join(yaml.Jokes, "\n"), ev, rtm)
     case "insults":
-        //yaml := read_yaml("yaml/insults.yaml")
+        send_message(strings.Join(yaml.Insults, "\n"), ev, rtm)
     case "friends":
-        yaml := read_yaml("yaml/friends.yaml")
-
         var friends []string
         for f := range yaml.Friends {
             friends = append(friends, f)
         }
-        send_message(strings.Join(friends, ", "), ev, rtm)
+        send_message(strings.Join(friends, "\n"), ev, rtm)
     }
 
 }
