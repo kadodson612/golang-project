@@ -20,9 +20,11 @@ func remove_friend(tokens []string, ev *slack.MessageEvent, rtm *slack.RTM) {
     // check if friend exists
     _, exists := yaml.Friends[name]
 
-    if exists != true {
+    if exists {
 
-        //TODO: remove friend and write
+        // remove friend and write
+        delete(yaml.Friends, name)
+        write_yaml(YAML_FILE, yaml)
 
     }
 
@@ -37,15 +39,18 @@ func remove_phrase(tokens []string, ev *slack.MessageEvent, rtm *slack.RTM) {
     }
 
     name := strings.ToLower(tokens[1])
-//    phrase := strings.ToLower(strings.Join(tokens[2:], " "))
+    phrase := strings.ToLower(strings.Join(tokens[2:], " "))
     yaml := read_yaml(YAML_FILE)
 
     _, exists := yaml.Friends[name]
 
-    if exists == true {
+    if exists {
 
-        //TODO: remove phrase and write
-
+        // remove phrase and write
+        friend := yaml.Friends[name]
+        friend.Phrases = delete_item(friend.Phrases, phrase)
+        yaml.Friends[name] = friend
+        write_yaml(YAML_FILE, yaml)
     }
 
 }
@@ -58,10 +63,12 @@ func remove_joke(tokens []string, ev *slack.MessageEvent, rtm *slack.RTM) {
         send_message("Usage: *addjoke <joke>", ev, rtm)
     }
 
-//    joke := strings.ToLower(strings.Join(tokens[1:], " "))
-//    yaml := read_yaml(YAML_FILE)
+    joke := strings.ToLower(strings.Join(tokens[1:], " "))
+    yaml := read_yaml(YAML_FILE)
 
-    //TODO: remove joke and write
+    // remove joke and write
+    yaml.Jokes = delete_item(yaml.Jokes, joke)
+    write_yaml(YAML_FILE, yaml)
 
 }
 
@@ -73,10 +80,12 @@ func remove_insult(tokens []string, ev *slack.MessageEvent, rtm *slack.RTM) {
         send_message("Usage: *addinsult <insult>", ev, rtm)
     }
 
-//    insult := strings.ToLower(strings.Join(tokens[1:], " "))
-//    yaml := read_yaml(YAML_FILE)
+    insult := strings.ToLower(strings.Join(tokens[1:], " "))
+    yaml := read_yaml(YAML_FILE)
 
-    //TODO: remove insult and write
+    // remove insult and write
+    yaml.Insults = delete_item(yaml.Insults, insult)
+    write_yaml(YAML_FILE, yaml)
 
 }
 
@@ -89,14 +98,18 @@ func remove_alias(tokens []string, ev *slack.MessageEvent, rtm *slack.RTM) {
     }
 
     name := strings.ToLower(tokens[1])
-//    alias := strings.ToLower(strings.Join(tokens[2:], " "))
+    alias := strings.ToLower(strings.Join(tokens[2:], " "))
     yaml := read_yaml(YAML_FILE)
 
     _, exists := yaml.Friends[name]
 
     if exists == true {
 
-        //TODO: remove alias and write
+        // remove alias and write
+        friend := yaml.Friends[name]
+        friend.Aliases = delete_item(friend.Aliases, alias)
+        yaml.Friends[name] = friend
+        write_yaml(YAML_FILE, yaml)
 
     }
 
