@@ -8,6 +8,8 @@ import (
 
 type Config struct {
     Friends map[string]Friend
+    Jokes []string
+    Insults []string
 }
 
 type Friend struct {
