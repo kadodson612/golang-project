@@ -21,7 +21,7 @@ func show(tokens []string, ev *slack.MessageEvent, rtm *slack.RTM) {
 
     item := tokens[1]
 
-    yaml := read_yaml("friends.yaml")
+    yaml := read_yaml("YAML_FILE")
 
     switch item {
 
@@ -55,7 +55,7 @@ func joke(tokens []string, ev *slack.MessageEvent, rtm *slack.RTM) {
         }
     }
 
-    yaml := read_yaml("friends.yaml")
+    yaml := read_yaml("YAML_FILE")
 
     var jokes []string
     for _, j := range yaml.Jokes {
@@ -96,7 +96,7 @@ func insult(tokens []string, ev *slack.MessageEvent, rtm *slack.RTM) {
         }
     }
 
-    yaml := read_yaml("friends.yaml")
+    yaml := read_yaml("YAML_FILE")
 
     var insults []string
     for _, j := range yaml.Insults {
@@ -140,7 +140,7 @@ func speak(tokens []string, ev *slack.MessageEvent, rtm *slack.RTM) {
 
     friend := tokens[1]
 
-    yaml := read_yaml("friends.yaml")
+    yaml := read_yaml(YAML_FILE)
 
     var phrases []string
 
@@ -181,7 +181,7 @@ func aka(tokens []string, ev *slack.MessageEvent, rtm *slack.RTM) {
 
     friend := tokens[1]
 
-    yaml := read_yaml("friends.yaml")
+    yaml := read_yaml("YAML_FILE")
 
     var aliases []string
 
