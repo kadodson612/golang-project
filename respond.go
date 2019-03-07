@@ -21,7 +21,7 @@ func show(tokens []string, ev *slack.MessageEvent, rtm *slack.RTM) {
 
     item := tokens[1]
 
-    yaml := read_yaml("YAML_FILE")
+    yaml := read_yaml(YAML_FILE)
 
     switch item {
 
@@ -48,37 +48,43 @@ func joke(tokens []string, ev *slack.MessageEvent, rtm *slack.RTM) {
         } else {
             num, err := strconv.Atoi(tokens[1])
             if err != nil {
-                panic(err)
+                send_message("Usage: *joke < joke number (opt) | -a >", ev, rtm)
+                return
             } else {
                 jokeNum = num
             }
         }
     }
 
-    yaml := read_yaml("YAML_FILE")
+    yaml := read_yaml(YAML_FILE)
 
     var jokes []string
     for _, j := range yaml.Jokes {
         jokes = append(jokes, j)
     }
 
-    if jokeNum == 0 {
-        rand.Seed(time.Now().Unix())
-        joke := jokes[rand.Intn(len(jokes))]
-        send_message(joke, ev, rtm)
-
-    } else if jokeNum < 0 {
-        send_message(strings.Join(jokes, "\n"), ev, rtm)
-
-    } else if jokeNum > 0 {
-        if jokeNum < len(jokes) {
-            joke := jokes[jokeNum]
+    if len(jokes) <= 0 {
+        send_message("Add more jokes!", ev, rtm)
+        return
+    } else {
+        if jokeNum == 0 {
+            rand.Seed(time.Now().Unix())
+            joke := jokes[rand.Intn(len(jokes))]
             send_message(joke, ev, rtm)
-        } else {
-            send_message("That's not a valid joke number!", ev, rtm)
+
+        } else if jokeNum < 0 {
+            send_message(strings.Join(jokes, "\n"), ev, rtm)
+
+        } else if jokeNum > 0 {
+            if jokeNum < len(jokes) {
+                joke := jokes[jokeNum]
+                send_message(joke, ev, rtm)
+            } else {
+                send_message("That's not a valid joke number!", ev, rtm)
+            }
+            
         }
-        
-    }
+    }   
 }
 
 func insult(tokens []string, ev *slack.MessageEvent, rtm *slack.RTM) {
@@ -89,52 +95,64 @@ func insult(tokens []string, ev *slack.MessageEvent, rtm *slack.RTM) {
         } else {
             num, err := strconv.Atoi(tokens[1])
             if err != nil {
-                panic(err)
+                send_message("Usage: *insult < insult number (opt) | -a >", ev, rtm)
+                return
             } else {
                 insultNum = num
             }
         }
     }
 
-    yaml := read_yaml("YAML_FILE")
+    yaml := read_yaml(YAML_FILE)
 
     var insults []string
     for _, j := range yaml.Insults {
         insults = append(insults, j)
     }
 
-    if insultNum == 0 {
-        rand.Seed(time.Now().Unix())
-        insult := insults[rand.Intn(len(insults))]
-        send_message(insult, ev, rtm)
-
-    } else if insultNum < 0 {
-        send_message(strings.Join(insults, "\n"), ev, rtm)
-
-    } else if insultNum > 0 {
-        if insultNum < len(insults) {
-            insult := insults[insultNum]
+    if len(insults) <= 0 {
+        send_message("Add more insults!! ALL OF THE INSULTS!", ev, rtm)
+        return
+    } else {
+        if insultNum == 0 {
+            rand.Seed(time.Now().Unix())
+            insult := insults[rand.Intn(len(insults))]
             send_message(insult, ev, rtm)
-        } else {
-            send_message("That's not a valid insult number!", ev, rtm)
+
+        } else if insultNum < 0 {
+            send_message(strings.Join(insults, "\n"), ev, rtm)
+
+        } else if insultNum > 0 {
+            if insultNum < len(insults) {
+                insult := insults[insultNum]
+                send_message(insult, ev, rtm)
+            } else {
+                send_message("That's not a valid insult number!", ev, rtm)
+            }
+            
         }
-        
     }
+
+        
 }
 
 func speak(tokens []string, ev *slack.MessageEvent, rtm *slack.RTM) {
     phraseNum := 0
     if len(tokens) < 2{
-        send_message("Usage: *speak < name > < number(opt) >", ev, rtm)
+        send_message("Usage: *speak < name > < number(opt) | -a >", ev, rtm)
+        return
     } else if len(tokens) == 3 {
         if tokens[2] == "-a" {
             phraseNum = -1
         } else {
             num, err := strconv.Atoi(tokens[2])
             if err != nil {
-                panic(err)
+                send_message("Usage: *speak < name > < number(opt) | -a >", ev, rtm)
+                return
+            } else {
+                phraseNum = num                
             }
-            phraseNum = num
+
         }
     }
 
@@ -152,36 +170,43 @@ func speak(tokens []string, ev *slack.MessageEvent, rtm *slack.RTM) {
         }    
     }
 
-    var phrase string
-    
-    if phraseNum == 0 {
-        rand.Seed(time.Now().Unix())
-        phrase = phrases[rand.Intn(len(phrases))]
-        send_message(phrase, ev, rtm)
-    } else if phraseNum > 0 {
-        if phraseNum < len(phrases){
-            phrase = phrases[phraseNum - 1]
-            send_message(phrase, ev, rtm)
-        } else {
-            send_message("That's not a valid phrase number!", ev, rtm)
-        }
+    if len(phrases) <= 0 {
+        send_message("Give this friend a phrase :(", ev, rtm)
+        return
+    } else {
+        var phrase string
         
-    } else if phraseNum < 0 {
-        send_message(strings.Join(phrases, "\n"), ev, rtm)
+        if phraseNum == 0 {
+            rand.Seed(time.Now().Unix())
+            phrase = phrases[rand.Intn(len(phrases))]
+            send_message(phrase, ev, rtm)
+        } else if phraseNum > 0 {
+            if phraseNum < len(phrases){
+                phrase = phrases[phraseNum - 1]
+                send_message(phrase, ev, rtm)
+            } else {
+                send_message("That's not a valid phrase number!", ev, rtm)
+            }
+            
+        } else if phraseNum < 0 {
+            send_message(strings.Join(phrases, "\n"), ev, rtm)
+        }
     }
+        
 }
 
 func aka(tokens []string, ev *slack.MessageEvent, rtm *slack.RTM) {
     var showAll bool
     if len(tokens) < 2{
         send_message("Usage: *aka < name > < -a >", ev, rtm)
+        return
     } else if len(tokens) == 3 {
         showAll = true
     }
 
     friend := tokens[1]
 
-    yaml := read_yaml("YAML_FILE")
+    yaml := read_yaml(YAML_FILE)
 
     var aliases []string
 
@@ -193,14 +218,18 @@ func aka(tokens []string, ev *slack.MessageEvent, rtm *slack.RTM) {
         }    
     }
 
-    if showAll == true {
-        send_message(strings.Join(aliases, "\n"), ev, rtm)
-
+    if len(aliases) <= 0 {
+        send_message("Give this friend an alias :(", ev, rtm)
     } else {
-        rand.Seed(time.Now().Unix())
-        alias := aliases[rand.Intn(len(aliases))]
-        send_message(alias, ev, rtm)
-    }
+        if showAll == true {
+            send_message(strings.Join(aliases, "\n"), ev, rtm)
+
+        } else {
+            rand.Seed(time.Now().Unix())
+            alias := aliases[rand.Intn(len(aliases))]
+            send_message(alias, ev, rtm)
+        }
+    } 
 
 }
 
