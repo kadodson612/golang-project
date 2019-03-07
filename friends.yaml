@@ -1,0 +1,19 @@
+friends:
+    Maru:
+        phrases:
+              - meow
+        aliases:
+            - meowru
+            - crackers
+            - nom
+    Kelly:
+        phrases:
+            - That's pretty neat
+        aliases:
+            - shitdick
+insults:
+    - That's pretty neat
+    - Crackers and Snacks
+jokes:
+    - That's pretty neat
+    - Crackers and Snacks
