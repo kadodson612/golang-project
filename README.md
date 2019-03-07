@@ -32,3 +32,68 @@ go build
 ```
 ./squadbot
 ```
+
+## Commands
+
+### Add Methods:
+```
+*addfriend <name>
+```
+
+```
+*addphrase <name> <phrase>
+```
+
+```
+*addalias <name> <alias>
+```
+
+```
+*addjoke <joke>
+```
+
+```
+*addinsult <insult>
+```
+
+### Remove Methods:
+```
+*rmfriend <name>
+```
+
+```
+*rmphrase <name> <phrase>
+```
+
+```
+*rmalias <name> <alias>
+```
+
+```
+*rmjoke <joke>
+```
+
+```
+*rminsult <insult>
+```
+
+### Speak Methods:
+```
+*speak <name>
+```
+
+```
+*joke
+```
+
+```
+*aka <name> 
+```
+
+```
+*insult
+```
+
+```
+*show <insults | jokes | friends>
+```
